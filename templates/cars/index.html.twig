@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List Cars{% endblock %}
+
+{% block body %}
+{% if app.session.get('success') %}
+  <div class="container">
+    <div class="alert alert-success">
+    {{ app.session.get('success') }}
+    </div>
+  </div>
+{% endif %}
+{% if app.session.get('error') %}
+  <div class="container">
+    <div class="alert alert-danger">
+    {{ app.session.get('error') }}
+    </div>
+  </div>
+{% endif %}
+<div class="container">
+  <a href="{{ path('new_car')}}" class="btn btn-secondary">Create</a>
+</div>
+<div class="container">
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{ 'car.title'|trans }}</th>
+        <th scope="col">{{ 'car.brand'|trans }}</th>
+        <th scope="col">{{ 'car.model'|trans }}</th>
+        <th scope="col">{{ 'car.color'|trans }}</th>
+        <th scope="col">{{ 'car.year'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for car in cars %}
+      <tr>
+        <th scope="row">{{ car.id }}</th>
+        <td>{{ car.name }}</td>
+        <td>{{ car.brand.name }}</td>
+        <td>{{ car.model }}</td>
+        <td data-toggle="tooltip" data-placement="top" title="{{ car.colors.referance }}">{{ car.colors.name }}</td>
+        <td>{{ car.year }}</td>
+        <td>
+          <a href="{{ path('edit_car', {'id': car.id} ) }}" class="btn btn-primary">
+            <i class="fas fa-edit"></i>
+          </a>
+          <button type="button" class="btn btn-danger delete-car" data-id="{{ car.id }}" data-toggle="modal" data-target="#modalDelete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+          <a href="{{ path('single_car', {'id': car.id, 'slug': car.name |replace({' ': "-"}) } ) }}" class="btn btn-info">
+            <i class="fas fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="modal fade modale-delete" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{ 'car.action.delete'|trans }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {{ 'car.delete.confermation'|trans }}
+        </div>
+        <div class="modal-footer">
+        <form action="" class="form-delete" method="post">
+          <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+           >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+  <script src="/script.js" charset="utf-8"></script>
+{% endblock %}

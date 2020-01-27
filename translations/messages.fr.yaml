@@ -1,0 +1,7 @@
+car.title: "Le nome du voiture"
+car.brand: "La Marque"
+car.model: "Model"
+car.color: "Color"
+car.year: "Année"
+car.action.delete: "Suppression une voiture"
+car.delete.confermation: "Es-tu sûr de vouloir le supprimer ?"
